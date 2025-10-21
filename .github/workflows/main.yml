@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./HttpServer 
-          tags: ${{ secrets.NAME_DOCKER }}/tp-devops-database:latest
+          tags: ${{ secrets.NAME_DOCKER }}/tp-devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
 
