@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./Java/simpleapi   
+    container_name: my-springboot-app
+    networks:
+      - app-network
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
+      SPRING_DATASOURCE_USERNAME: usr
+      SPRING_DATASOURCE_PASSWORD: pwd
+    restart: unless-stopped
+
+  database:
+    image: postgres:15
+    container_name: my-postgres-container
+    networks:
+      - app-network
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+    restart: unless-stopped
+
+  httpd:
+    build:
+      context: ./HttpServer   
+    container_name: my-httpd
+    networks:
+      - app-network
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"   
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
