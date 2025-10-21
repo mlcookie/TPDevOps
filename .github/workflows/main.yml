@@ -44,22 +44,24 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./Java/simpleapi   # chemin vers le Dockerfile
-          tags: ${{ secrets.NAME_DOCKER }}/tp-devops-simple-api:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+          push: true
+          tags: ${{ secrets.NAME_DOCKER }}/tp-devopssimpleapi:latest
+         
 
       - name: Build database Docker image
         uses: docker/build-push-action@v6
         with:
           context: .  # chemin vers le Dockerfile il est à la racine
-          tags: ${{ secrets.NAME_DOCKER }}/tp-devops-database:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+          push: true
+
+          tags: ${{ secrets.NAME_DOCKER }}/tp-devopsdatabase:latest
 
       - name: Build httpd Docker image
         uses: docker/build-push-action@v6
         with:
           context: ./HttpServer 
-          tags: ${{ secrets.NAME_DOCKER }}/tp-devops-httpd:latest
-          push: ${{ github.ref == 'refs/heads/main' }}
+          push: true
+          tags: ${{ secrets.NAME_DOCKER }}/tp-devopshttpd:latest
 
 
 
