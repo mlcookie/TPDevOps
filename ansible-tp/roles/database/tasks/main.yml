@@ -1,0 +1,23 @@
+- name: Pull mydatabase image from DockerHub
+  docker_image:
+    name: mlcookie/tp-devopsdatabase:latest
+    source: pull
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python
+
+- name: Run PostgreSQL database container
+  docker_container:
+    name: my_database
+    image: mlcookie/tp-devopsdatabase:latest
+    state: started
+    restart_policy: always
+    env:
+      POSTGRES_DB: db
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    networks:
+      - name: my_network
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python

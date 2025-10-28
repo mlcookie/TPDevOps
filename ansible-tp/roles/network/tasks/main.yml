@@ -1,0 +1,7 @@
+- name: Create app network
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python
+  docker_network:
+    name: my_network
+    state: present
+    driver: bridge

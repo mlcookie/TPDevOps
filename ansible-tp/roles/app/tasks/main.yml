@@ -1,0 +1,20 @@
+- name: Run application container
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python
+  docker_container:
+    name: my-springboot-app
+
+    image: mlcookie/tp-devopssimpleapi
+
+    state: started
+    restart_policy: always
+    networks:
+      - name: my_network
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://my_database:5432/db
+      SPRING_DATASOURCE_USERNAME: usr
+      SPRING_DATASOURCE_PASSWORD: pwd
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"

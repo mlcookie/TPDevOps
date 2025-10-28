@@ -1,0 +1,12 @@
+- name: Run HTTPD proxy container
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python
+  docker_container:
+    name: my_proxy
+    image: mlcookie/tp-devopshttpd:latest
+    state: started
+    restart_policy: always
+    networks:
+      - name: my_network
+    ports:
+      - "80:80"
