@@ -72,3 +72,31 @@ jobs:
           context: ./HttpServer 
           push: true
           tags: ${{ secrets.NAME_DOCKER }}/tp-devopshttpd:latest
+
+  deploy-to-server:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python & Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip
+          pip install ansible
+
+      - name: Add SSH private key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Run Ansible playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook -i ansible-tp/inventories/setup.yml ansible-tp/playbook.yml \
+            --private-key ~/.ssh/id_rsa \
+            -u admin
